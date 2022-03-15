@@ -1,6 +1,4 @@
-import React from "react";
-
-const Card = ({ activity }: any) => {
+const Card = ({activity}: any) => {
   return (
     <div className="flex flex-col shadow-lg rounded-md p-3 bg-gradient-to-r from-gray-50 to-slate-300">
       <h2 className="py-4 text-left ml-12 text-2xl font-semibold">
@@ -56,7 +54,7 @@ const Card = ({ activity }: any) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Card;
+export default Card

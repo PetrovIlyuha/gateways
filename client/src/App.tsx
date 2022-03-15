@@ -1,16 +1,16 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import TopNavigation from "./components/shared/TopNavigation";
-import Card from "./components/activities/Card";
+import axios from "axios"
+import {useEffect, useState} from "react"
+import TopNavigation from "./components/shared/TopNavigation"
+import Card from "./components/activities/Card"
 
 function App() {
-  const [activities, setActivities] = useState([]);
+  const [activities, setActivities] = useState([])
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/activities").then((response) => {
-      setActivities(response.data);
-    });
-  }, []);
+    axios.get("http://localhost:5000/api/activities").then(response => {
+      setActivities(response.data)
+    })
+  }, [])
 
   return (
     <>
@@ -24,7 +24,7 @@ function App() {
         <div className="other w-1/2">Other Data Block</div>
       </div>
     </>
-  );
+  )
 }
 
-export default App;
+export default App
