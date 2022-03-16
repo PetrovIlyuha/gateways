@@ -1,6 +1,6 @@
 const Card = ({activity}: any) => {
   return (
-    <div className="flex flex-col shadow-lg rounded-md p-3 bg-gradient-to-r from-gray-50 to-slate-300">
+    <div className="flex flex-col shadow-lg rounded-md  bg-gradient-to-r from-gray-50 to-slate-300">
       <h2 className="py-4 text-left ml-12 text-2xl font-semibold">
         {activity.title}
       </h2>
@@ -8,7 +8,7 @@ const Card = ({activity}: any) => {
         src={`https://source.unsplash.com/random/${Math.ceil(
           Math.random() * 1000
         )}/?${activity.category}`}
-        className="w-4/5 h-2/3 self-center max-h-64 object-cover rounded-lg shadow-xl"
+        className="w-full sm:h-1/2 md:h-2/3 self-center max-h-64 object-cover"
         alt="activity"
       />
       <div className="flex flex-col gap-3 px-14 py-3">
