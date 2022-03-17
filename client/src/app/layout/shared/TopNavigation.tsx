@@ -1,6 +1,7 @@
 /* This example requires Tailwind CSS v2.0+ */
 import {Fragment} from "react"
 import {Disclosure, Menu, Transition} from "@headlessui/react"
+import {Link, useLocation} from "react-router-dom"
 import {BellIcon, MenuIcon, XIcon} from "@heroicons/react/outline"
 
 function classNames(...classes: any[]) {
@@ -8,10 +9,12 @@ function classNames(...classes: any[]) {
 }
 
 const TopNavigation = () => {
+  const {pathname} = useLocation()
+
   return (
     <Disclosure
       as="nav"
-      className=" bg-gradient-to-r from-gray-50 to-slate-300 shadow"
+      className=" bg-gradient-to-r from-gray-50 to-slate-300 shadow fixed top-0 w-full z-10"
     >
       {({open}) => (
         <>
@@ -49,19 +52,24 @@ const TopNavigation = () => {
                   </h2>
                 </div>
                 <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                  {/* Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
-                  <a
-                    href="/"
-                    className="border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                  <Link
+                    to="/"
+                    className={classNames(
+                      pathname === "/" && "border-indigo-500",
+                      "text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                    )}
                   >
                     Activities
-                  </a>
-                  <a
-                    href="/"
-                    className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                  </Link>
+                  <Link
+                    to="/create"
+                    className={classNames(
+                      "text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium",
+                      pathname === "/create" && "border-indigo-500"
+                    )}
                   >
                     Create Activity
-                  </a>
+                  </Link>
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
