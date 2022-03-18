@@ -4,12 +4,12 @@ import Card from "../components/Card"
 
 interface ListProps {
   activities: Activity[]
-  setDetailedActivity: (activity: Activity) => void
+  selectActivityDetailedView: (activity: Activity) => void
 }
 
 const ActivityList: React.FC<ListProps> = ({
   activities,
-  setDetailedActivity,
+  selectActivityDetailedView,
 }) => {
   return (
     <div className="flex flex-col w-1/2 gap-12 mb-10">
@@ -17,7 +17,7 @@ const ActivityList: React.FC<ListProps> = ({
         <Card
           activity={activity}
           key={activity.id}
-          setDetailedActivity={setDetailedActivity}
+          setDetailedActivity={selectActivityDetailedView}
         />
       ))}
     </div>
