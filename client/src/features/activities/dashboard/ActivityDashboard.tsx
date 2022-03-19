@@ -6,10 +6,26 @@ import ActivityList from "./ActivityList"
 
 const ActivityDashboard = () => {
   const [activities, setActivities] = useState<Activity[]>([])
-  const [detailedActivity, setDetailedActivity] = useState<
-    Activity | undefined
-  >(undefined)
+  const [detailedActivity, setDetailedActivity] = useState<Activity | undefined>(undefined)
+  const [updatedActivityId, setUpdatedActivityId] = useState<string>()
   const [inEditMode, setInEditMode] = useState<boolean>(false)
+  const [categories, setCategories] = useState<string[] | undefined>()
+
+  useEffect(() => {
+    axios.get<Activity[]>("http://localhost:5000/api/activities").then(response => {
+      setActivities(response.data)
+      setDetailedActivity(response.data[0])
+    })
+  }, [])
+
+  useEffect(() => {
+    const uniqueCategories = Array.from(new Set(activities.map(a => a.category)))
+    setCategories(uniqueCategories)
+  }, [activities])
+
+  useEffect(() => {
+    setDetailedActivity(activities.find(a => a.id === updatedActivityId))
+  }, [updatedActivityId, activities])
 
   const toggleEditMode = () => setInEditMode(prev => !prev)
 
@@ -18,31 +34,27 @@ const ActivityDashboard = () => {
     setInEditMode(false)
   }
 
-  const closeActivityDetails = () =>
-    inEditMode ? toggleEditMode() : setDetailedActivity(undefined)
+  const closeEditMode = (activity: Activity | undefined) => {
+    if (activity !== undefined) {
+      setActivities(activities => activities.map(a => (a.id === activity.id ? activity : a)))
+      setUpdatedActivityId(activity.id)
+    }
+    toggleEditMode()
+  }
 
-  useEffect(() => {
-    axios
-      .get<Activity[]>("http://localhost:5000/api/activities")
-      .then(response => {
-        setActivities(response.data)
-        setDetailedActivity(response.data[0])
-      })
-  }, [])
+  const closeViewMode = () => (inEditMode ? toggleEditMode() : setDetailedActivity(undefined))
 
   return (
     <div className="sm:w-4xl max-w-7xl md:max-w-5xl m-auto flex mt-12 gap-3">
-      <ActivityList
-        activities={activities}
-        selectActivityDetailedView={selectActivityDetailedView}
-      />
+      <ActivityList activities={activities} selectActivityDetailedView={selectActivityDetailedView} />
       <div className="w-1/2">
         {detailedActivity ? (
           <DetailedActivity
             detailedActivity={detailedActivity}
-            toggleEditMode={toggleEditMode}
             inEditMode={inEditMode}
-            closeActivityDetails={closeActivityDetails}
+            closeViewMode={closeViewMode}
+            closeEditMode={closeEditMode}
+            categories={categories}
           />
         ) : null}
       </div>

@@ -12,10 +12,7 @@ const TopNavigation = () => {
   const {pathname} = useLocation()
 
   return (
-    <Disclosure
-      as="nav"
-      className=" bg-gradient-to-r from-gray-50 to-slate-300 shadow fixed top-0 w-full z-10"
-    >
+    <Disclosure as="nav" className=" bg-gradient-to-r from-gray-50 to-slate-300 shadow fixed top-0 w-full z-10">
       {({open}) => (
         <>
           <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
@@ -33,13 +30,7 @@ const TopNavigation = () => {
               </div>
               <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex-shrink-0 flex items-center">
-                  <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -47,9 +38,7 @@ const TopNavigation = () => {
                       d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
                     />
                   </svg>
-                  <h2 className="text-1xl font-semibold text-gray-700 ml-2">
-                    Gateways
-                  </h2>
+                  <h2 className="text-1xl font-semibold text-gray-700 ml-2">Gateways</h2>
                 </div>
                 <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
                   <Link
@@ -105,39 +94,21 @@ const TopNavigation = () => {
                     <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <Menu.Item>
                         {({active}) => (
-                          <a
-                            href="/"
-                            className={classNames(
-                              active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
-                            )}
-                          >
+                          <a href="/" className={classNames(active ? "bg-gray-100" : "", "block px-4 py-2 text-sm text-gray-700")}>
                             Your Profile
                           </a>
                         )}
                       </Menu.Item>
                       <Menu.Item>
                         {({active}) => (
-                          <a
-                            href="/"
-                            className={classNames(
-                              active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
-                            )}
-                          >
+                          <a href="/" className={classNames(active ? "bg-gray-100" : "", "block px-4 py-2 text-sm text-gray-700")}>
                             Settings
                           </a>
                         )}
                       </Menu.Item>
                       <Menu.Item>
                         {({active}) => (
-                          <a
-                            href="/"
-                            className={classNames(
-                              active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
-                            )}
-                          >
+                          <a href="/" className={classNames(active ? "bg-gray-100" : "", "block px-4 py-2 text-sm text-gray-700")}>
                             Sign out
                           </a>
                         )}

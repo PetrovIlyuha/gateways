@@ -10,22 +10,19 @@ import {BiCategoryAlt} from "react-icons/bi"
 
 interface Props {
   detailedActivity: Activity
-  toggleEditMode: () => void
+  categories: string[] | undefined
   inEditMode: boolean
-  closeActivityDetails: () => void
+  closeEditMode: (activity?: Activity) => void
+  closeViewMode: () => void
 }
 
-const DetailedActivity: React.FC<Props> = ({
-  detailedActivity,
-  toggleEditMode,
-  inEditMode,
-  closeActivityDetails,
-}) => {
+const DetailedActivity: React.FC<Props> = ({detailedActivity, categories, inEditMode, closeEditMode, closeViewMode}) => {
   const {scrollTop} = useScroll()
   const initialFormState = detailedActivity ?? {
     id: "",
     title: "",
     description: "",
+    category: "",
     date: "",
     city: "",
     venue: "",
@@ -36,13 +33,7 @@ const DetailedActivity: React.FC<Props> = ({
     setActivity(prev => ({...prev, [e.target.name]: e.target.value}))
   }
 
-  const preventStateLossAndCloseForm = () => {
-    if (inEditMode) {
-      // TODO! Submit update changes to api
-      console.log(activity)
-    }
-    toggleEditMode()
-  }
+  const saveAndCloseView = () => (inEditMode ? closeEditMode(activity) : closeEditMode())
 
   return (
     <div className="ml-8" style={{marginTop: scrollTop}}>
@@ -57,9 +48,7 @@ const DetailedActivity: React.FC<Props> = ({
             onChange={updateActivity}
           />
         ) : (
-          <p className="mt-4 text-4xl font-extrabold text-gray-900 tracking-tight">
-            {detailedActivity?.title}
-          </p>
+          <p className="mt-4 text-4xl font-extrabold text-gray-900 tracking-tight">{detailedActivity?.title}</p>
         )}
 
         <motion.img
@@ -71,13 +60,13 @@ const DetailedActivity: React.FC<Props> = ({
         />
         <div className="flex justify-around gap-2">
           <button
-            onClick={preventStateLossAndCloseForm}
+            onClick={saveAndCloseView}
             className="py-3 px-6 bg-gradient-to-br from-blue-400 to-blue-800 w-1/2 rounded-md shadow-sm text-white font-semibold text-2xl"
           >
             {inEditMode ? "Save" : "Edit"}
           </button>
           <button
-            onClick={closeActivityDetails}
+            onClick={closeViewMode}
             className="py-3 px-6 bg-gradient-to-br from-red-500 to-red-800 w-1/2 rounded-md shadow-sm text-white font-semibold text-2xl"
           >
             {inEditMode ? "Cancel" : "Close View"}
@@ -86,11 +75,7 @@ const DetailedActivity: React.FC<Props> = ({
         <div className="lg:grid lg:grid-cols-2 gap-5 mt-3">
           <div className="flex flex-col justify-between h-20">
             <BsCalendar2Check />
-            <motion.h2
-              initial={{opacity: 0}}
-              animate={{opacity: 1, transition: {duration: 0.4}}}
-              className="leading-3"
-            >
+            <motion.h2 initial={{opacity: 0}} animate={{opacity: 1, transition: {duration: 0.4}}} className="leading-3">
               Date:
             </motion.h2>
             {inEditMode ? (
@@ -104,11 +89,7 @@ const DetailedActivity: React.FC<Props> = ({
                 className="px-2 rounded-md"
               />
             ) : (
-              <motion.h2
-                initial={{opacity: 0}}
-                animate={{opacity: 1, transition: {duration: 0.4}}}
-                className="font-semibold text-xl"
-              >
+              <motion.h2 initial={{opacity: 0}} animate={{opacity: 1, transition: {duration: 0.4}}} className="font-semibold text-xl">
                 {new Date(detailedActivity?.date).toDateString()}
               </motion.h2>
             )}
@@ -116,11 +97,7 @@ const DetailedActivity: React.FC<Props> = ({
           <div className="flex flex-col justify-between h-20">
             <MdOutlineShareLocation />
             {!inEditMode && (
-              <motion.h3
-                initial={{opacity: 0}}
-                animate={{opacity: 1, transition: {duration: 0.4}}}
-                className="leading-4"
-              >
+              <motion.h3 initial={{opacity: 0}} animate={{opacity: 1, transition: {duration: 0.4}}} className="leading-4">
                 Location:
               </motion.h3>
             )}
@@ -148,41 +125,26 @@ const DetailedActivity: React.FC<Props> = ({
                 />
               </div>
             ) : (
-              <motion.h2
-                initial={{opacity: 0}}
-                animate={{opacity: 1, transition: {duration: 0.4}}}
-                className="font-semibold text-xl"
-              >
+              <motion.h2 initial={{opacity: 0}} animate={{opacity: 1, transition: {duration: 0.4}}} className="font-semibold text-xl">
                 {detailedActivity.city} {detailedActivity.venue}
               </motion.h2>
             )}
           </div>
           <div className="flex flex-col justify-between h-20">
             <BiCategoryAlt />
-            <motion.h2
-              initial={{opacity: 0}}
-              animate={{opacity: 1, transition: {duration: 0.4}}}
-              className="leading-3"
-            >
+            <motion.h2 initial={{opacity: 0}} animate={{opacity: 1, transition: {duration: 0.4}}} className="leading-3">
               Category:
             </motion.h2>
             {inEditMode ? (
-              <motion.input
-                initial={{opacity: 0}}
-                animate={{opacity: 1, transition: {duration: 0.4}}}
-                type="text"
-                name="category"
-                value={activity.category}
-                onChange={updateActivity}
-                placeholder="category"
-                className="px-1 rounded-md"
-              />
+              <motion.select name="category" onChange={updateActivity}>
+                {categories?.map(category => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </motion.select>
             ) : (
-              <motion.h2
-                initial={{opacity: 0}}
-                animate={{opacity: 1, transition: {duration: 0.4}}}
-                className="font-semibold text-xl"
-              >
+              <motion.h2 initial={{opacity: 0}} animate={{opacity: 1, transition: {duration: 0.4}}} className="font-semibold text-xl">
                 {detailedActivity.category}
               </motion.h2>
             )}
@@ -202,11 +164,7 @@ const DetailedActivity: React.FC<Props> = ({
                 onChange={updateActivity}
               ></motion.textarea>
             ) : (
-              <motion.h2
-                initial={{opacity: 0}}
-                animate={{opacity: 1, transition: {duration: 0.4}}}
-                className="font-semibold text-xl"
-              >
+              <motion.h2 initial={{opacity: 0}} animate={{opacity: 1, transition: {duration: 0.4}}} className="font-semibold text-xl">
                 {detailedActivity.description}
               </motion.h2>
             )}

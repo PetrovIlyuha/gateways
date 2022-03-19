@@ -1,78 +1,116 @@
+import {useState} from "react"
 import {Link} from "react-router-dom"
+import {v4 as uuidv4} from "uuid"
 
 const CreateActivityForm = () => {
+  const initialFormState = {
+    id: uuidv4(),
+    title: "",
+    description: "",
+    category: ["drinks", "culture", "music", "film", "food", "travel"],
+    date: "",
+    city: "",
+    venue: "",
+  }
+  const [activity, setActivity] = useState(initialFormState)
+
+  const updateActivity = (e: any) => {
+    setActivity(prev => ({...prev, [e.target.name]: e.target.value}))
+  }
   return (
     <div className="min-h-screen container mx-auto w-1/2 flex flex-col justify-center">
       <form className="space-y-8">
         <div className="space-y-8">
           <div>
             <div>
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
-                Create Event
-              </h3>
+              <h3 className="text-lg leading-6 font-medium text-gray-900">Create Event</h3>
             </div>
 
             <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
               <div className="sm:col-span-6">
-                <label
-                  htmlFor="title"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
+                <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
                   Title
                 </label>
                 <input
                   type="text"
                   name="title"
+                  value={activity.title}
+                  onChange={updateActivity}
                   id="title"
                   className="flex-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full h-8 rounded-md sm:text-sm border-gray-300"
                 />
               </div>
 
               <div className="sm:col-span-6">
-                <label
-                  htmlFor="ab1out"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
+                <label htmlFor="ab1out" className="block text-sm font-medium text-gray-700 mb-2">
                   Description
                 </label>
                 <div className="mt-1">
                   <textarea
                     id="description"
                     name="description"
+                    value={activity.description}
+                    onChange={updateActivity}
                     rows={3}
                     className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
-                    defaultValue={""}
                   />
                 </div>
-                <p className="mt-2 text-sm text-gray-500">
-                  Write a few words about this event (activity).
-                </p>
+                <p className="mt-2 text-sm text-gray-500">Write a few words about this event (activity).</p>
               </div>
 
               <div className="sm:col-span-6">
-                <label
-                  htmlFor="category"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Category
+                <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-2">
+                  City
                 </label>
                 <input
                   type="text"
-                  name="category"
-                  id="category"
+                  name="city"
+                  value={activity.city}
+                  onChange={updateActivity}
+                  id="title"
                   className="flex-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full h-8 rounded-md sm:text-sm border-gray-300"
                 />
               </div>
+
               <div className="sm:col-span-6">
-                <label
-                  htmlFor="date"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                <label htmlFor="venue" className="block text-sm font-medium text-gray-700 mb-2">
+                  Venue
+                </label>
+                <input
+                  type="text"
+                  name="venue"
+                  value={activity.venue}
+                  onChange={updateActivity}
+                  id="title"
+                  className="flex-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full h-8 rounded-md sm:text-sm border-gray-300"
+                />
+              </div>
+
+              <div className="sm:col-span-6">
+                <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
+                  Category
+                </label>
+                <select
+                  name="category"
+                  onChange={updateActivity}
+                  className="flex-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full h-8 rounded-md sm:text-sm border-gray-300"
                 >
+                  {activity.category.map(cat => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="sm:col-span-6">
+                <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-2">
                   Date
                 </label>
                 <input
                   type="date"
                   name="date"
+                  value={activity.date}
+                  onChange={updateActivity}
                   id="date"
                   className="flex-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full h-8 pl-2 rounded-md sm:text-sm border-gray-300"
                 />
