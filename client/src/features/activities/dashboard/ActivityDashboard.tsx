@@ -14,6 +14,7 @@ const ActivityDashboard = () => {
   const [categories, setCategories] = useState<string[] | undefined>()
   const [loading, setLoading] = useState<boolean>(true)
   const [modalOpen, setModalOpen] = useState<boolean>(false)
+  const [submitting, setSubmitting] = useState<boolean>(false)
 
   useEffect(() => {
     agent.Activities.list().then(response => {
@@ -49,10 +50,14 @@ const ActivityDashboard = () => {
   }
 
   const closeEditMode = (activity: Activity | undefined) => {
+    setSubmitting(true)
     if (activity !== undefined) {
-      setActivities(activities => activities.map(a => (a.id === activity.id ? activity : a)))
-      setUpdatedActivityId(activity.id)
+      agent.Activities.update(activity).then(() => {
+        setActivities(activities => activities.map(a => (a.id === activity.id ? activity : a)))
+        setUpdatedActivityId(activity.id)
+      })
     }
+    setSubmitting(false)
     toggleEditMode()
   }
 
@@ -62,8 +67,15 @@ const ActivityDashboard = () => {
 
   return (
     <div className="sm:w-4xl max-w-7xl md:max-w-5xl m-auto flex mt-12 gap-3">
-      <ConfirmModal isOpen={modalOpen} handleClose={() => setModalOpen(false)} handleDelete={removeActivity} />
-      <ActivityList activities={activities} selectActivityDetailedView={selectActivityDetailedView} />
+      <ConfirmModal
+        isOpen={modalOpen}
+        handleClose={() => setModalOpen(false)}
+        handleDelete={removeActivity}
+      />
+      <ActivityList
+        activities={activities}
+        selectActivityDetailedView={selectActivityDetailedView}
+      />
       <div className="w-1/2">
         {detailedActivity ? (
           <DetailedActivity
@@ -73,7 +85,7 @@ const ActivityDashboard = () => {
             closeViewMode={closeViewMode}
             closeEditMode={closeEditMode}
             categories={categories}
-            removeActivity={removeActivity}
+            submitting={submitting}
           />
         ) : null}
       </div>

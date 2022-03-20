@@ -5,6 +5,8 @@ import TopNavigation from "./shared/TopNavigation"
 import ActivityDashboard from "../../features/activities/dashboard/ActivityDashboard"
 import DetailedActivity from "../../features/activities/details/DetailedActivity"
 import CreateActivityForm from "../../features/activities/create/CreateActivityForm"
+import "react-toastify/dist/ReactToastify.css"
+import {ToastContainer} from "react-toastify"
 
 function App() {
   const [showIntro, setShowIntro] = useState<Boolean>(false)
@@ -17,7 +19,13 @@ function App() {
     <div className="bg-gray-100">
       {showIntro ? (
         <div className="w-full h-screen flex items-center justify-center">
-          <video src={`/assets/intro.mp4`} className="w-screen min-h-screen object-cover relative" autoPlay loop muted />
+          <video
+            src={`/assets/intro.mp4`}
+            className="w-screen min-h-screen object-cover relative"
+            autoPlay
+            loop
+            muted
+          />
           <motion.h2
             initial={{scale: 0, opacity: 0.2}}
             animate={{scale: 1.5, opacity: 1, transition: {duration: 1}}}
@@ -43,6 +51,7 @@ function App() {
               <Route path="/activity/:id" component={DetailedActivity} />
             </Switch>
           </div>
+          <ToastContainer />
         </motion.div>
       )}
     </div>

@@ -1,22 +1,40 @@
 import {useState} from "react"
-import {Link} from "react-router-dom"
+import {Link, useHistory} from "react-router-dom"
+import {toast} from "react-toastify"
 import {v4 as uuidv4} from "uuid"
+import agent from "../../../app/api/agent"
+import {Activity} from "../../../app/layout/models/activity"
+
+import {ImSpinner9} from "react-icons/im"
 
 const CreateActivityForm = () => {
-  const initialFormState = {
+  const history = useHistory()
+  const initialFormState: Activity = {
     id: uuidv4(),
     title: "",
     description: "",
-    category: ["drinks", "culture", "music", "film", "food", "travel"],
+    category: "",
     date: "",
     city: "",
     venue: "",
   }
-  const [activity, setActivity] = useState(initialFormState)
 
+  const availableCategories = ["drinks", "culture", "music", "film", "food", "travel"]
+  const [activity, setActivity] = useState(initialFormState)
+  const [submitting, setSubmitting] = useState<boolean>(false)
   const updateActivity = (e: any) => {
     setActivity(prev => ({...prev, [e.target.name]: e.target.value}))
   }
+
+  const createActivity = () => {
+    setSubmitting(true)
+    agent.Activities.create(activity).then(() => {
+      toast.success("Activity was Created! ⭐")
+    })
+    setSubmitting(false)
+    history.push("/")
+  }
+
   return (
     <div className="min-h-screen container mx-auto w-1/2 flex flex-col justify-center">
       <form className="space-y-8">
@@ -55,7 +73,9 @@ const CreateActivityForm = () => {
                     className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
                   />
                 </div>
-                <p className="mt-2 text-sm text-gray-500">Write a few words about this event (activity).</p>
+                <p className="mt-2 text-sm text-gray-500">
+                  Write a few words about this event (activity).
+                </p>
               </div>
 
               <div className="sm:col-span-6">
@@ -95,7 +115,7 @@ const CreateActivityForm = () => {
                   onChange={updateActivity}
                   className="flex-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full h-8 rounded-md sm:text-sm border-gray-300"
                 >
-                  {activity.category.map(cat => (
+                  {availableCategories.map(cat => (
                     <option key={cat} value={cat}>
                       {cat}
                     </option>
@@ -130,9 +150,13 @@ const CreateActivityForm = () => {
               </button>
             </Link>
             <button
+              onClick={createActivity}
               type="submit"
-              className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="relative ml-3 inline-flex justify-center py-2 px-8 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
+              {submitting && (
+                <ImSpinner9 className="animate-spin text-white absolute top-3 left-3" />
+              )}
               Save
             </button>
           </div>
