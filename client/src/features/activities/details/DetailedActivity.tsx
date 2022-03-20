@@ -14,9 +14,10 @@ interface Props {
   inEditMode: boolean
   closeEditMode: (activity?: Activity) => void
   closeViewMode: () => void
+  removeActivity: (id: string) => void
 }
 
-const DetailedActivity: React.FC<Props> = ({detailedActivity, categories, inEditMode, closeEditMode, closeViewMode}) => {
+const DetailedActivity: React.FC<Props> = ({detailedActivity, removeActivity, categories, inEditMode, closeEditMode, closeViewMode}) => {
   const {scrollTop} = useScroll()
   const initialFormState = detailedActivity ?? {
     id: "",
@@ -169,6 +170,16 @@ const DetailedActivity: React.FC<Props> = ({detailedActivity, categories, inEdit
               </motion.h2>
             )}
           </div>
+          {inEditMode && (
+            <motion.button
+              initial={{opacity: 0.2, x: -20}}
+              animate={{opacity: 1, x: 0, transition: {duration: 0.3}}}
+              onClick={() => removeActivity(activity.id)}
+              className="py-3 px-2 bg-gradient-to-br from-blue-400 to-blue-800 w-full rounded-md shadow-sm text-white font-semibold text-2xl col-span-1 col-start-2"
+            >
+              Delete Activity
+            </motion.button>
+          )}
         </div>
       </div>
     </div>

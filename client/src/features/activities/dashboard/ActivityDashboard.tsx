@@ -6,7 +6,7 @@ import ActivityList from "./ActivityList"
 
 const ActivityDashboard = () => {
   const [activities, setActivities] = useState<Activity[]>([])
-  const [detailedActivity, setDetailedActivity] = useState<Activity | undefined>(undefined)
+  const [detailedActivity, setDetailedActivity] = useState<Activity | undefined>()
   const [updatedActivityId, setUpdatedActivityId] = useState<string>()
   const [inEditMode, setInEditMode] = useState<boolean>(false)
   const [categories, setCategories] = useState<string[] | undefined>()
@@ -34,6 +34,12 @@ const ActivityDashboard = () => {
     setInEditMode(false)
   }
 
+  const removeActivity = (id: string) => {
+    toggleEditMode()
+    setDetailedActivity(undefined)
+    setActivities([...activities.filter(a => a.id !== id)])
+  }
+
   const closeEditMode = (activity: Activity | undefined) => {
     if (activity !== undefined) {
       setActivities(activities => activities.map(a => (a.id === activity.id ? activity : a)))
@@ -55,6 +61,7 @@ const ActivityDashboard = () => {
             closeViewMode={closeViewMode}
             closeEditMode={closeEditMode}
             categories={categories}
+            removeActivity={removeActivity}
           />
         ) : null}
       </div>
