@@ -1,6 +1,8 @@
-import axios from "axios"
 import {useEffect, useState} from "react"
+import agent from "../../../app/api/agent"
 import {Activity} from "../../../app/layout/models/activity"
+import CirclesLoader from "../../../app/layout/shared/CirclesLoader"
+import ConfirmModal from "../../../app/layout/shared/modals/ConfirmModal"
 import DetailedActivity from "../details/DetailedActivity"
 import ActivityList from "./ActivityList"
 
@@ -10,17 +12,22 @@ const ActivityDashboard = () => {
   const [updatedActivityId, setUpdatedActivityId] = useState<string>()
   const [inEditMode, setInEditMode] = useState<boolean>(false)
   const [categories, setCategories] = useState<string[] | undefined>()
+  const [loading, setLoading] = useState<boolean>(true)
+  const [modalOpen, setModalOpen] = useState<boolean>(false)
 
   useEffect(() => {
-    axios.get<Activity[]>("http://localhost:5000/api/activities").then(response => {
-      setActivities(response.data)
-      setDetailedActivity(response.data[0])
+    agent.Activities.list().then(response => {
+      setActivities(response)
+      setDetailedActivity(response[0])
+      setLoading(false)
     })
   }, [])
 
   useEffect(() => {
-    const uniqueCategories = Array.from(new Set(activities.map(a => a.category)))
-    setCategories(uniqueCategories)
+    if (activities !== undefined) {
+      const uniqueCategories = Array.from(new Set(activities.map(a => a.category)))
+      setCategories(uniqueCategories)
+    }
   }, [activities])
 
   useEffect(() => {
@@ -34,10 +41,11 @@ const ActivityDashboard = () => {
     setInEditMode(false)
   }
 
-  const removeActivity = (id: string) => {
+  const removeActivity = (id?: string) => {
     toggleEditMode()
+    setActivities([...activities.filter(a => a.id !== detailedActivity?.id)])
     setDetailedActivity(undefined)
-    setActivities([...activities.filter(a => a.id !== id)])
+    setModalOpen(false)
   }
 
   const closeEditMode = (activity: Activity | undefined) => {
@@ -50,14 +58,18 @@ const ActivityDashboard = () => {
 
   const closeViewMode = () => (inEditMode ? toggleEditMode() : setDetailedActivity(undefined))
 
+  if (loading) return <CirclesLoader />
+
   return (
     <div className="sm:w-4xl max-w-7xl md:max-w-5xl m-auto flex mt-12 gap-3">
+      <ConfirmModal isOpen={modalOpen} handleClose={() => setModalOpen(false)} handleDelete={removeActivity} />
       <ActivityList activities={activities} selectActivityDetailedView={selectActivityDetailedView} />
       <div className="w-1/2">
         {detailedActivity ? (
           <DetailedActivity
             detailedActivity={detailedActivity}
             inEditMode={inEditMode}
+            openConfirmModal={() => setModalOpen(true)}
             closeViewMode={closeViewMode}
             closeEditMode={closeEditMode}
             categories={categories}

@@ -15,9 +15,18 @@ interface Props {
   closeEditMode: (activity?: Activity) => void
   closeViewMode: () => void
   removeActivity: (id: string) => void
+  openConfirmModal: () => void
 }
 
-const DetailedActivity: React.FC<Props> = ({detailedActivity, removeActivity, categories, inEditMode, closeEditMode, closeViewMode}) => {
+const DetailedActivity: React.FC<Props> = ({
+  detailedActivity,
+  removeActivity,
+  openConfirmModal,
+  categories,
+  inEditMode,
+  closeEditMode,
+  closeViewMode,
+}) => {
   const {scrollTop} = useScroll()
   const initialFormState = detailedActivity ?? {
     id: "",
@@ -35,6 +44,10 @@ const DetailedActivity: React.FC<Props> = ({detailedActivity, removeActivity, ca
   }
 
   const saveAndCloseView = () => (inEditMode ? closeEditMode(activity) : closeEditMode())
+
+  const confirmDelete = () => {
+    openConfirmModal()
+  }
 
   return (
     <div className="ml-8" style={{marginTop: scrollTop}}>
@@ -84,7 +97,7 @@ const DetailedActivity: React.FC<Props> = ({detailedActivity, removeActivity, ca
                 initial={{opacity: 0}}
                 animate={{opacity: 1, transition: {duration: 0.4}}}
                 name="date"
-                value={new Date(activity.date).toISOString().substr(0, 10)}
+                value={new Date(activity.date).toISOString().substring(0, 10)}
                 onChange={updateActivity}
                 type="date"
                 className="px-2 rounded-md"
@@ -174,7 +187,7 @@ const DetailedActivity: React.FC<Props> = ({detailedActivity, removeActivity, ca
             <motion.button
               initial={{opacity: 0.2, x: -20}}
               animate={{opacity: 1, x: 0, transition: {duration: 0.3}}}
-              onClick={() => removeActivity(activity.id)}
+              onClick={confirmDelete}
               className="py-3 px-2 bg-gradient-to-br from-blue-400 to-blue-800 w-full rounded-md shadow-sm text-white font-semibold text-2xl col-span-1 col-start-2"
             >
               Delete Activity
