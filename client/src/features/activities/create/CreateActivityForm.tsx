@@ -2,15 +2,18 @@ import {useState} from "react"
 import {Link, useHistory} from "react-router-dom"
 import {toast} from "react-toastify"
 import {v4 as uuidv4} from "uuid"
-import agent from "../../../app/api/agent"
 import {motion} from "framer-motion"
 import {Activity} from "../../../app/layout/models/activity"
 
 import {ImSpinner9} from "react-icons/im"
-import {allCategories} from "../categories"
+import {observer} from "mobx-react-lite"
+import {useStore} from "../../../app/stores/store"
 
 const CreateActivityForm = () => {
   const history = useHistory()
+  const {
+    activityStore: {submitting, categories, createActivity},
+  } = useStore()
   const initialFormState: Activity = {
     id: uuidv4(),
     title: "",
@@ -22,22 +25,18 @@ const CreateActivityForm = () => {
   }
 
   const [activity, setActivity] = useState(initialFormState)
-  const [submitting, setSubmitting] = useState<boolean>(false)
+
   const updateActivity = (e: any) => {
     setActivity(prev => ({...prev, [e.target.name]: e.target.value}))
   }
 
-  const createActivity = (e: any) => {
+  const createActivityCommand = async (e: any) => {
     e.preventDefault()
-    setSubmitting(true)
-    console.log(activity)
-    agent.Activities.create(activity).then(() => {
-      toast.success("Activity was Created! ⭐")
-      setSubmitting(false)
-      setTimeout(() => {
-        history.push("/")
-      }, 800)
-    })
+    await createActivity(activity)
+    toast.success("Activity was Created! ⭐")
+    setTimeout(() => {
+      history.push("/")
+    }, 800)
   }
 
   return (
@@ -124,7 +123,7 @@ const CreateActivityForm = () => {
                   onChange={updateActivity}
                   className="flex-1 px-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full h-8 rounded-md sm:text-sm border-gray-300"
                 >
-                  {allCategories.map(cat => (
+                  {categories.map(cat => (
                     <option key={cat} value={cat}>
                       {cat}
                     </option>
@@ -159,7 +158,7 @@ const CreateActivityForm = () => {
               </button>
             </Link>
             <button
-              onClick={createActivity}
+              onClick={createActivityCommand}
               type="submit"
               className="relative ml-3 inline-flex justify-center py-2 px-8 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
@@ -175,4 +174,4 @@ const CreateActivityForm = () => {
   )
 }
 
-export default CreateActivityForm
+export default observer(CreateActivityForm)

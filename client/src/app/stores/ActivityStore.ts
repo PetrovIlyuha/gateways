@@ -62,8 +62,10 @@ export default class ActivityStore {
       this.detailedActivity = undefined
     }
   }
-  //       toast.success(`Activity ${detailedActivity.title} was removed!`)
-  //       setModalOpen(false)
-  //     })
-  //   }
+
+  createActivity = async (activity: Activity) => {
+    this.submitting = true
+    await agent.Activities.create(activity)
+    this.submitting = false
+  }
 }
