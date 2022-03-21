@@ -7,6 +7,7 @@ import {motion} from "framer-motion"
 import {Activity} from "../../../app/layout/models/activity"
 
 import {ImSpinner9} from "react-icons/im"
+import {allCategories} from "../categories"
 
 const CreateActivityForm = () => {
   const history = useHistory()
@@ -20,22 +21,6 @@ const CreateActivityForm = () => {
     venue: "",
   }
 
-  const availableCategories = [
-    "culture-festival",
-    "music",
-    "film",
-    "food",
-    "travel",
-    "conference",
-    "meetup",
-    "trade-show",
-    "seminar",
-    "corporate",
-    "workshop",
-    "company-party",
-    "product-launch",
-    "promotional",
-  ]
   const [activity, setActivity] = useState(initialFormState)
   const [submitting, setSubmitting] = useState<boolean>(false)
   const updateActivity = (e: any) => {
@@ -139,7 +124,7 @@ const CreateActivityForm = () => {
                   onChange={updateActivity}
                   className="flex-1 px-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full h-8 rounded-md sm:text-sm border-gray-300"
                 >
-                  {availableCategories.map(cat => (
+                  {allCategories.map(cat => (
                     <option key={cat} value={cat}>
                       {cat}
                     </option>

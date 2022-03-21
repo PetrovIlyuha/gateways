@@ -1,20 +1,26 @@
 /* This example requires Tailwind CSS v2.0+ */
-import React, {Fragment} from "react"
+import {Fragment} from "react"
 import {Dialog, Transition} from "@headlessui/react"
 import {ExclamationIcon, XIcon} from "@heroicons/react/outline"
 import ReactPortal from "./ReactPortal"
+import {observer} from "mobx-react-lite"
+import {useStore} from "../../../stores/store"
+import {toast} from "react-toastify"
 
-interface Props {
-  isOpen: boolean
-  handleClose: () => void
-  handleDelete: () => void
-}
-
-const ConfirmModal: React.FC<Props> = ({isOpen, handleClose, handleDelete}) => {
+const ConfirmModal = () => {
+  const {
+    activityStore: {detailedActivity, removeActivity},
+    modalStore: {modalOpen, toggleModal},
+  } = useStore()
+  const handleDelete = async () => {
+    await removeActivity()
+    toast.success(`Activity ${detailedActivity?.title} was removed!`)
+    toggleModal()
+  }
   return (
     <ReactPortal wrapperId="react-portal-modal-container">
-      <Transition.Root show={isOpen} as={Fragment}>
-        <Dialog as="div" className="fixed z-10 inset-0 overflow-y-auto" onClose={handleClose}>
+      <Transition.Root show={modalOpen} as={Fragment}>
+        <Dialog as="div" className="fixed z-10 inset-0 overflow-y-auto" onClose={toggleModal}>
           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <Transition.Child
               as={Fragment}
@@ -46,7 +52,7 @@ const ConfirmModal: React.FC<Props> = ({isOpen, handleClose, handleDelete}) => {
                   <button
                     type="button"
                     className="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    onClick={handleClose}
+                    onClick={toggleModal}
                   >
                     <span className="sr-only">Close</span>
                     <XIcon className="h-6 w-6" aria-hidden="true" />
@@ -78,7 +84,7 @@ const ConfirmModal: React.FC<Props> = ({isOpen, handleClose, handleDelete}) => {
                   <button
                     type="button"
                     className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
-                    onClick={handleClose}
+                    onClick={toggleModal}
                   >
                     Cancel
                   </button>
@@ -92,4 +98,4 @@ const ConfirmModal: React.FC<Props> = ({isOpen, handleClose, handleDelete}) => {
   )
 }
 
-export default ConfirmModal
+export default observer(ConfirmModal)

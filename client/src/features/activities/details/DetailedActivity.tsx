@@ -8,26 +8,24 @@ import {MdOutlineShareLocation, MdOutlineDescription} from "react-icons/md"
 import {BsCalendar2Check} from "react-icons/bs"
 import {BiCategoryAlt} from "react-icons/bi"
 import {ImSpinner9} from "react-icons/im"
+import {observer} from "mobx-react-lite"
+import {useStore} from "../../../app/stores/store"
 
-interface Props {
-  detailedActivity: Activity
-  categories: string[] | undefined
-  inEditMode: boolean
-  closeEditMode: (activity?: Activity) => void
-  closeViewMode: () => void
-  openConfirmModal: () => void
-  submitting: boolean
-}
+const DetailedActivity = () => {
+  const {
+    activityStore: {
+      detailedActivity,
+      closeViewMode,
+      closeEditMode,
+      categories,
+      inEditMode,
+      submitting,
+    },
+    modalStore: {toggleModal},
+  } = useStore()
 
-const DetailedActivity: React.FC<Props> = ({
-  detailedActivity,
-  openConfirmModal,
-  categories,
-  inEditMode,
-  closeEditMode,
-  closeViewMode,
-  submitting,
-}) => {
+  console.log(inEditMode)
+
   const {scrollTop} = useScroll()
   const initialFormState = detailedActivity ?? {
     id: "",
@@ -44,11 +42,8 @@ const DetailedActivity: React.FC<Props> = ({
     setActivity(prev => ({...prev, [e.target.name]: e.target.value}))
   }
 
-  const saveAndCloseView = () => (inEditMode ? closeEditMode(activity) : closeEditMode())
-
-  const confirmDelete = () => {
-    openConfirmModal()
-  }
+  const saveAndCloseView = async () =>
+    inEditMode ? await closeEditMode(activity) : await closeEditMode(undefined)
 
   return (
     <div className="ml-8" style={{marginTop: scrollTop}}>
@@ -116,7 +111,7 @@ const DetailedActivity: React.FC<Props> = ({
                 animate={{opacity: 1, transition: {duration: 0.4}}}
                 className="font-semibold text-xl"
               >
-                {new Date(detailedActivity?.date).toDateString()}
+                {detailedActivity && new Date(detailedActivity.date).toDateString()}
               </motion.h2>
             )}
           </div>
@@ -160,7 +155,7 @@ const DetailedActivity: React.FC<Props> = ({
                 animate={{opacity: 1, transition: {duration: 0.4}}}
                 className="font-semibold text-xl"
               >
-                {detailedActivity.city} {detailedActivity.venue}
+                {detailedActivity?.city} {detailedActivity?.venue}
               </motion.h2>
             )}
           </div>
@@ -187,7 +182,7 @@ const DetailedActivity: React.FC<Props> = ({
                 animate={{opacity: 1, transition: {duration: 0.4}}}
                 className="font-semibold text-xl"
               >
-                {detailedActivity.category}
+                {detailedActivity?.category}
               </motion.h2>
             )}
           </div>
@@ -211,7 +206,7 @@ const DetailedActivity: React.FC<Props> = ({
                 animate={{opacity: 1, transition: {duration: 0.4}}}
                 className="font-semibold text-xl"
               >
-                {detailedActivity.description}
+                {detailedActivity?.description}
               </motion.h2>
             )}
           </div>
@@ -219,7 +214,7 @@ const DetailedActivity: React.FC<Props> = ({
             <motion.button
               initial={{opacity: 0.2, x: -20}}
               animate={{opacity: 1, x: 0, transition: {duration: 0.3}}}
-              onClick={confirmDelete}
+              onClick={toggleModal}
               className="py-3 px-2 bg-gradient-to-br from-blue-400 to-blue-800 w-full rounded-md shadow-sm text-white font-semibold text-2xl col-span-1 col-start-2"
             >
               Delete Activity
@@ -231,4 +226,4 @@ const DetailedActivity: React.FC<Props> = ({
   )
 }
 
-export default DetailedActivity
+export default observer(DetailedActivity)

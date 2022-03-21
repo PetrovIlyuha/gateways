@@ -3,10 +3,13 @@ import "./index.css"
 import App from "./app/layout/App"
 import {BrowserRouter as Router} from "react-router-dom"
 import reportWebVitals from "./reportWebVitals"
+import {store, StoreContext} from "./app/stores/store"
 
 ReactDOM.render(
   <Router>
-    <App />
+    <StoreContext.Provider value={store}>
+      <App />
+    </StoreContext.Provider>
   </Router>,
   document.getElementById("root")
 )

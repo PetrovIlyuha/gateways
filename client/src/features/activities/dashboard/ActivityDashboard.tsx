@@ -1,119 +1,32 @@
 import {useEffect, useState} from "react"
 import {toast} from "react-toastify"
+import {observer} from "mobx-react-lite"
 import agent from "../../../app/api/agent"
 import {Activity} from "../../../app/layout/models/activity"
-import CirclesLoader from "../../../app/layout/shared/CirclesLoader"
+import CirclesLoader from "../../../app/layout/shared/loaders/CirclesLoader"
 import ConfirmModal from "../../../app/layout/shared/modals/ConfirmModal"
+import {useStore} from "../../../app/stores/store"
 import DetailedActivity from "../details/DetailedActivity"
 import ActivityList from "./ActivityList"
 
 const ActivityDashboard = () => {
-  const [activities, setActivities] = useState<Activity[]>([])
-  const [detailedActivity, setDetailedActivity] = useState<Activity | undefined>()
-  const [updatedActivityId, setUpdatedActivityId] = useState<string>()
-  const [inEditMode, setInEditMode] = useState<boolean>(false)
-  const [categories, setCategories] = useState<string[] | undefined>([
-    "culture-festival",
-    "music",
-    "film",
-    "food",
-    "travel",
-    "conference",
-    "meetup",
-    "trade-show",
-    "seminar",
-    "corporate",
-    "workshop",
-    "company-party",
-    "product-launch",
-    "promotional",
-  ])
-  const [loading, setLoading] = useState<boolean>(true)
-  const [modalOpen, setModalOpen] = useState<boolean>(false)
-  const [submitting, setSubmitting] = useState<boolean>(false)
+  const {
+    activityStore: {loadActivities, loading, detailedActivity},
+  } = useStore()
 
   useEffect(() => {
-    agent.Activities.list().then(response => {
-      setActivities(response)
-      setDetailedActivity(response[0])
-      setLoading(false)
-    })
-  }, [])
-
-  useEffect(() => {
-    if (activities !== undefined) {
-      const uniqueCategories = Array.from(new Set(activities.map(a => a.category)))
-      setCategories(prev => (prev ? [...prev, ...uniqueCategories] : [...uniqueCategories]))
-    }
-  }, [activities])
-
-  useEffect(() => {
-    setDetailedActivity(activities.find(a => a.id === updatedActivityId))
-  }, [updatedActivityId, activities])
-
-  const toggleEditMode = () => setInEditMode(prev => !prev)
-
-  const selectActivityDetailedView = (activity: Activity) => {
-    setDetailedActivity(activity)
-    setInEditMode(false)
-  }
-
-  const removeActivity = () => {
-    setSubmitting(true)
-    if (detailedActivity) {
-      agent.Activities.delete(detailedActivity.id).then(() => {
-        setActivities([...activities.filter(a => a.id !== detailedActivity?.id)])
-        toast.success(`Activity ${detailedActivity.title} was removed!`)
-        setSubmitting(false)
-        toggleEditMode()
-        setDetailedActivity(undefined)
-        setModalOpen(false)
-      })
-    }
-  }
-
-  const closeEditMode = (activity: Activity | undefined) => {
-    setSubmitting(true)
-    if (activity !== undefined) {
-      agent.Activities.update(activity).then(() => {
-        setActivities(activities => activities.map(a => (a.id === activity.id ? activity : a)))
-        setUpdatedActivityId(activity.id)
-      })
-    }
-    setSubmitting(false)
-    toggleEditMode()
-  }
-
-  const closeViewMode = () => (inEditMode ? toggleEditMode() : setDetailedActivity(undefined))
+    loadActivities()
+  }, [loadActivities])
 
   if (loading) return <CirclesLoader />
 
   return (
     <div className="sm:w-4xl max-w-7xl md:max-w-5xl m-auto flex mt-12 gap-3">
-      <ConfirmModal
-        isOpen={modalOpen}
-        handleClose={() => setModalOpen(false)}
-        handleDelete={removeActivity}
-      />
-      <ActivityList
-        activities={activities}
-        selectActivityDetailedView={selectActivityDetailedView}
-      />
-      <div className="w-1/2">
-        {detailedActivity ? (
-          <DetailedActivity
-            detailedActivity={detailedActivity}
-            inEditMode={inEditMode}
-            openConfirmModal={() => setModalOpen(true)}
-            closeViewMode={closeViewMode}
-            closeEditMode={closeEditMode}
-            categories={categories}
-            submitting={submitting}
-          />
-        ) : null}
-      </div>
+      <ConfirmModal />
+      <ActivityList />
+      <div className="w-1/2">{detailedActivity ? <DetailedActivity /> : null}</div>
     </div>
   )
 }
 
-export default ActivityDashboard
+export default observer(ActivityDashboard)

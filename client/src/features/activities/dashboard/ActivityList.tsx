@@ -1,27 +1,21 @@
+import {observer} from "mobx-react-lite"
 import React from "react"
-import {Activity} from "../../../app/layout/models/activity"
+import {useStore} from "../../../app/stores/store"
 import Card from "../components/Card"
 
-interface ListProps {
-  activities: Activity[]
-  selectActivityDetailedView: (activity: Activity) => void
-}
-
-const ActivityList: React.FC<ListProps> = ({
-  activities,
-  selectActivityDetailedView,
-}) => {
+const ActivityList = () => {
+  const {activityStore} = useStore()
   return (
     <div className="flex flex-col w-1/2 gap-12 mb-10">
-      {activities?.map(activity => (
+      {activityStore.activities?.map(activity => (
         <Card
           activity={activity}
           key={activity.id}
-          setDetailedActivity={selectActivityDetailedView}
+          setDetailedActivity={activityStore.selectActivityDetails}
         />
       ))}
     </div>
   )
 }
 
-export default ActivityList
+export default observer(ActivityList)
