@@ -4,28 +4,25 @@ import {BiCategoryAlt} from "react-icons/bi"
 
 const Card = ({activity, setDetailedActivity}: any) => {
   return (
-    <div className="flex flex-col shadow-inner border-2 border-slate-300 rounded-md  bg-gradient-to-r from-gray-50 to-slate-300">
-      <h2 className="py-4 text-left ml-12 text-2xl font-semibold">
-        {activity.title}
-      </h2>
-      <img
-        src={`/assets/categoryImages/${activity.category}.jpg`}
-        className="w-full sm:h-1/2 md:h-2/3 self-center max-h-64 object-cover"
-        alt="activity"
-      />
+    <div className="flex group flex-col shadow-inner border-2 border-slate-300 rounded-md  bg-gradient-to-r from-gray-50 to-slate-300">
+      <h2 className="py-4 text-left ml-12 text-2xl font-semibold">{activity.title}</h2>
+      <div className="overflow-hidden sm:h-1/2 md:h-2/3">
+        <img
+          src={`/assets/categoryImages/${activity.category}.jpg`}
+          className="w-full transition-all duration-300 self-center max-h-64 object-cover group-hover:scale-105"
+          alt="activity"
+        />
+      </div>
       <div className="flex justify-between">
         <div className="flex flex-col gap-3 px-14 py-3">
           <div className="flex items-center">
             <BsCalendar2Check />
-            <h3 className="font-semibold ml-3">
-              {new Date(activity.date).toLocaleDateString()}
-            </h3>
+            <h3 className="font-semibold ml-3">{new Date(activity.date).toLocaleDateString()}</h3>
           </div>
           <div className="flex items-center">
             <MdOutlineShareLocation />
             <h3 className="font-semibold ml-3">
-              <span className="text-blue-800">{activity.city}</span>{" "}
-              {activity.venue}
+              <span className="text-blue-800">{activity.city}</span> {activity.venue}
             </h3>
           </div>
           <div className="flex items-center">

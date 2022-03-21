@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react"
+import {toast} from "react-toastify"
 import agent from "../../../app/api/agent"
 import {Activity} from "../../../app/layout/models/activity"
 import CirclesLoader from "../../../app/layout/shared/CirclesLoader"
@@ -11,7 +12,22 @@ const ActivityDashboard = () => {
   const [detailedActivity, setDetailedActivity] = useState<Activity | undefined>()
   const [updatedActivityId, setUpdatedActivityId] = useState<string>()
   const [inEditMode, setInEditMode] = useState<boolean>(false)
-  const [categories, setCategories] = useState<string[] | undefined>()
+  const [categories, setCategories] = useState<string[] | undefined>([
+    "culture-festival",
+    "music",
+    "film",
+    "food",
+    "travel",
+    "conference",
+    "meetup",
+    "trade-show",
+    "seminar",
+    "corporate",
+    "workshop",
+    "company-party",
+    "product-launch",
+    "promotional",
+  ])
   const [loading, setLoading] = useState<boolean>(true)
   const [modalOpen, setModalOpen] = useState<boolean>(false)
   const [submitting, setSubmitting] = useState<boolean>(false)
@@ -27,7 +43,7 @@ const ActivityDashboard = () => {
   useEffect(() => {
     if (activities !== undefined) {
       const uniqueCategories = Array.from(new Set(activities.map(a => a.category)))
-      setCategories(uniqueCategories)
+      setCategories(prev => (prev ? [...prev, ...uniqueCategories] : [...uniqueCategories]))
     }
   }, [activities])
 
@@ -42,11 +58,18 @@ const ActivityDashboard = () => {
     setInEditMode(false)
   }
 
-  const removeActivity = (id?: string) => {
-    toggleEditMode()
-    setActivities([...activities.filter(a => a.id !== detailedActivity?.id)])
-    setDetailedActivity(undefined)
-    setModalOpen(false)
+  const removeActivity = () => {
+    setSubmitting(true)
+    if (detailedActivity) {
+      agent.Activities.delete(detailedActivity.id).then(() => {
+        setActivities([...activities.filter(a => a.id !== detailedActivity?.id)])
+        toast.success(`Activity ${detailedActivity.title} was removed!`)
+        setSubmitting(false)
+        toggleEditMode()
+        setDetailedActivity(undefined)
+        setModalOpen(false)
+      })
+    }
   }
 
   const closeEditMode = (activity: Activity | undefined) => {

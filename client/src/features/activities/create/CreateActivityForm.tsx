@@ -3,6 +3,7 @@ import {Link, useHistory} from "react-router-dom"
 import {toast} from "react-toastify"
 import {v4 as uuidv4} from "uuid"
 import agent from "../../../app/api/agent"
+import {motion} from "framer-motion"
 import {Activity} from "../../../app/layout/models/activity"
 
 import {ImSpinner9} from "react-icons/im"
@@ -13,32 +14,53 @@ const CreateActivityForm = () => {
     id: uuidv4(),
     title: "",
     description: "",
-    category: "",
+    category: "culture-festival",
     date: "",
     city: "",
     venue: "",
   }
 
-  const availableCategories = ["drinks", "culture", "music", "film", "food", "travel"]
+  const availableCategories = [
+    "culture-festival",
+    "music",
+    "film",
+    "food",
+    "travel",
+    "conference",
+    "meetup",
+    "trade-show",
+    "seminar",
+    "corporate",
+    "workshop",
+    "company-party",
+    "product-launch",
+    "promotional",
+  ]
   const [activity, setActivity] = useState(initialFormState)
   const [submitting, setSubmitting] = useState<boolean>(false)
   const updateActivity = (e: any) => {
     setActivity(prev => ({...prev, [e.target.name]: e.target.value}))
   }
 
-  const createActivity = () => {
+  const createActivity = (e: any) => {
+    e.preventDefault()
     setSubmitting(true)
+    console.log(activity)
     agent.Activities.create(activity).then(() => {
       toast.success("Activity was Created! ⭐")
+      setSubmitting(false)
+      setTimeout(() => {
+        history.push("/")
+      }, 800)
     })
-    setSubmitting(false)
-    setTimeout(() => {
-      history.push("/")
-    }, 1300)
   }
 
   return (
-    <div className="min-h-screen container mx-auto w-1/2 flex flex-col justify-center">
+    <motion.div
+      initial={{y: 100}}
+      animate={{y: 0, transition: {duration: 0.4}}}
+      className="min-h-screen container mx-auto w-1/2 flex flex-col justify-center"
+    >
       <form className="space-y-8">
         <div className="space-y-8">
           <div>
@@ -57,7 +79,7 @@ const CreateActivityForm = () => {
                   value={activity.title}
                   onChange={updateActivity}
                   id="title"
-                  className="flex-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full h-8 rounded-md sm:text-sm border-gray-300"
+                  className="flex-1 px-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full h-8 rounded-md sm:text-sm border-gray-300"
                 />
               </div>
 
@@ -72,7 +94,7 @@ const CreateActivityForm = () => {
                     value={activity.description}
                     onChange={updateActivity}
                     rows={3}
-                    className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
+                    className="shadow-sm px-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
                   />
                 </div>
                 <p className="mt-2 text-sm text-gray-500">
@@ -90,7 +112,7 @@ const CreateActivityForm = () => {
                   value={activity.city}
                   onChange={updateActivity}
                   id="title"
-                  className="flex-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full h-8 rounded-md sm:text-sm border-gray-300"
+                  className="flex-1 px-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full h-8 rounded-md sm:text-sm border-gray-300"
                 />
               </div>
 
@@ -104,7 +126,7 @@ const CreateActivityForm = () => {
                   value={activity.venue}
                   onChange={updateActivity}
                   id="title"
-                  className="flex-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full h-8 rounded-md sm:text-sm border-gray-300"
+                  className="flex-1 px-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full h-8 rounded-md sm:text-sm border-gray-300"
                 />
               </div>
 
@@ -115,7 +137,7 @@ const CreateActivityForm = () => {
                 <select
                   name="category"
                   onChange={updateActivity}
-                  className="flex-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full h-8 rounded-md sm:text-sm border-gray-300"
+                  className="flex-1 px-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full h-8 rounded-md sm:text-sm border-gray-300"
                 >
                   {availableCategories.map(cat => (
                     <option key={cat} value={cat}>
@@ -164,7 +186,7 @@ const CreateActivityForm = () => {
           </div>
         </div>
       </form>
-    </div>
+    </motion.div>
   )
 }
 

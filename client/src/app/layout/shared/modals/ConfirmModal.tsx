@@ -7,7 +7,7 @@ import ReactPortal from "./ReactPortal"
 interface Props {
   isOpen: boolean
   handleClose: () => void
-  handleDelete?: () => void
+  handleDelete: () => void
 }
 
 const ConfirmModal: React.FC<Props> = ({isOpen, handleClose, handleDelete}) => {
@@ -61,7 +61,9 @@ const ConfirmModal: React.FC<Props> = ({isOpen, handleClose, handleDelete}) => {
                       This Activity Will Be Permanently Deleted
                     </Dialog.Title>
                     <div className="mt-2">
-                      <p className="text-sm text-gray-500">Are you sure you want to delete this record?</p>
+                      <p className="text-sm text-gray-500">
+                        Are you sure you want to delete this record?
+                      </p>
                     </div>
                   </div>
                 </div>
