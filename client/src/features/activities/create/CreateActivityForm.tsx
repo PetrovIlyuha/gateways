@@ -32,7 +32,9 @@ const CreateActivityForm = () => {
       toast.success("Activity was Created! ⭐")
     })
     setSubmitting(false)
-    history.push("/")
+    setTimeout(() => {
+      history.push("/")
+    }, 1300)
   }
 
   return (
