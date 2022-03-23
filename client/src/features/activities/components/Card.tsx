@@ -1,11 +1,15 @@
 import {MdOutlineShareLocation, MdOutlineDescription} from "react-icons/md"
 import {BsCalendar2Check} from "react-icons/bs"
 import {BiCategoryAlt} from "react-icons/bi"
+import {useStore} from "../../../app/stores/store"
 
-const Card = ({activity, setDetailedActivity}: any) => {
+const Card = ({activity}: any) => {
+  const {
+    activityStore: {selectActivityDetails},
+  } = useStore()
   return (
     <div className="flex group flex-col shadow-inner border-2 border-slate-300 rounded-md  bg-gradient-to-r from-gray-50 to-slate-300">
-      <h2 className="py-4 text-left ml-12 text-2xl font-semibold">{activity.title}</h2>
+      <h2 className="py-4 text-left ml-5 text-xl font-bold">{activity.title}</h2>
       <div className="overflow-hidden sm:h-1/2 md:h-2/3">
         <img
           src={`/assets/categoryImages/${activity.category}.jpg`}
@@ -38,7 +42,7 @@ const Card = ({activity, setDetailedActivity}: any) => {
           {/* <Link to={`/activity/${activity.id}`}> */}
           <button
             className="px-10 py-2 bg-cyan-600 text-white font-semibold text-xl m-4 rounded-md shadow-lg"
-            onClick={() => setDetailedActivity(activity)}
+            onClick={() => selectActivityDetails(activity)}
           >
             View
           </button>

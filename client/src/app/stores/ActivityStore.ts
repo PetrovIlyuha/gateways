@@ -1,5 +1,5 @@
 import {allCategories} from "./../../features/activities/categories"
-import {makeAutoObservable} from "mobx"
+import {makeAutoObservable, runInAction} from "mobx"
 import {Activity} from "../layout/models/activity"
 import agent from "../api/agent"
 
@@ -35,13 +35,13 @@ export default class ActivityStore {
 
   closeEditMode = async (activity: Activity | undefined) => {
     this.submitting = true
-    console.log("should work when not editing")
 
     if (activity !== undefined) {
-      console.log("should work when Editing")
       await agent.Activities.update(activity)
-      this.activities = this.activities.map(a => (a.id === activity.id ? activity : a))
-      this.detailedActivity = this.activities.find(a => a.id === activity.id)
+      runInAction(() => {
+        this.activities = this.activities.map(a => (a.id === activity.id ? activity : a))
+        this.detailedActivity = this.activities.find(a => a.id === activity.id)
+      })
     }
     this.submitting = false
     this.toggleEditMode()
