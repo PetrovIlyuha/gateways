@@ -3,11 +3,12 @@ import {useState, useEffect} from "react"
 import {motion} from "framer-motion"
 import TopNavigation from "./shared/TopNavigation"
 import ActivityDashboard from "../../features/activities/dashboard/ActivityDashboard"
-import DetailedActivity from "../../features/activities/details/DetailedActivity"
 import CreateActivityForm from "../../features/activities/create/CreateActivityForm"
 import VideoLoaderOnLoad from "./shared/VideoLoaderOnLoad"
 import {ToastContainer} from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import FullDetailsActivity from "../../features/activities/details/FullDetailsActivity"
+import ConfirmModal from "./shared/modals/ConfirmModal"
 
 function App() {
   const [showIntro, setShowIntro] = useState<Boolean>(false)
@@ -30,11 +31,12 @@ function App() {
           }}
         >
           <TopNavigation />
+          <ConfirmModal />
           <div className="container mx-auto sm:px-6 lg:px-8 pt-14">
             <Switch>
               <Route path="/" exact component={ActivityDashboard} />
               <Route path="/create" component={CreateActivityForm} />
-              <Route path="/activity/:id" component={DetailedActivity} />
+              <Route path="/activity/:id" component={FullDetailsActivity} />
             </Switch>
           </div>
           <ToastContainer />

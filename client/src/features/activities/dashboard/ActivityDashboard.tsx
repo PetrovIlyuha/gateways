@@ -1,10 +1,9 @@
 import {useEffect} from "react"
 import {observer} from "mobx-react-lite"
 import CirclesLoader from "../../../app/layout/shared/loaders/CirclesLoader"
-import ConfirmModal from "../../../app/layout/shared/modals/ConfirmModal"
 import {useStore} from "../../../app/stores/store"
-import DetailedActivity from "../details/DetailedActivity"
 import ActivityList from "./ActivityList"
+import SideDetailedActivity from "../details/SideDetailedActivity"
 
 const ActivityDashboard = () => {
   const {
@@ -19,9 +18,8 @@ const ActivityDashboard = () => {
 
   return (
     <div className="sm:w-4xl max-w-7xl md:max-w-5xl m-auto flex mt-12 gap-3">
-      <ConfirmModal />
       <ActivityList />
-      {detailedActivity && <DetailedActivity />}
+      {detailedActivity && <SideDetailedActivity />}
     </div>
   )
 }

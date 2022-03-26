@@ -1,7 +1,10 @@
 import {MdOutlineShareLocation, MdOutlineDescription} from "react-icons/md"
+import {VscUnfold} from "react-icons/vsc"
+import {SiRevealdotjs} from "react-icons/si"
 import {BsCalendar2Check} from "react-icons/bs"
 import {BiCategoryAlt} from "react-icons/bi"
 import {useStore} from "../../../app/stores/store"
+import {Link} from "react-router-dom"
 
 const Card = ({activity}: any) => {
   const {
@@ -38,15 +41,23 @@ const Card = ({activity}: any) => {
             <h4 className="font-semibold ml-3">{activity.description}</h4>
           </div>
         </div>
-        <div className="flex flex-col justify-end">
-          {/* <Link to={`/activity/${activity.id}`}> */}
+        <div className="flex items-end">
           <button
-            className="px-10 py-2 bg-cyan-600 text-white font-semibold text-xl m-4 rounded-md shadow-lg"
+            className="h-14 flex justify-center items-center px-3 py-2 bg-gradient-to-br from-cyan-300 to-cyan-600 text-white font-semibold text-md m-2 rounded-md shadow-lg"
             onClick={() => selectActivityDetails(activity)}
           >
-            View
+            <VscUnfold size={32} /> Quick View
           </button>
-          {/* </Link> */}
+
+          <Link to={`/activity/${activity.id}`}>
+            <button
+              className="h-14 flex justify-center items-center px-3 py-2 bg-gradient-to-br from-blue-400 to-blue-800 text-white font-semibold text-md m-2 rounded-md shadow-lg"
+              onClick={() => selectActivityDetails(activity)}
+            >
+              <SiRevealdotjs size={32} />
+              Detailed View
+            </button>
+          </Link>
         </div>
       </div>
     </div>
