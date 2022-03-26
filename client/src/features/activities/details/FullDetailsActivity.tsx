@@ -10,18 +10,23 @@ import {ImSpinner9} from "react-icons/im"
 import {observer} from "mobx-react-lite"
 import {useStore} from "../../../app/stores/store"
 import {MODAL_TYPES} from "../../../app/stores/ModalStore"
-import {useHistory} from "react-router-dom"
+import {useHistory, useParams} from "react-router-dom"
+import CirclesLoader from "../../../app/layout/shared/loaders/CirclesLoader"
 
 const FullDetailsActivity = () => {
   const history = useHistory()
+  const params = useParams() as any
+
   const {
     activityStore: {
       detailedActivity,
       closeViewMode,
       closeEditMode,
       categories,
+      loadActivity,
       inEditMode,
       submitting,
+      loading,
     },
     modalStore: {toggleModal},
   } = useStore()
@@ -36,12 +41,15 @@ const FullDetailsActivity = () => {
     city: "",
     venue: "",
   }
-
   const [activity, setActivity] = useState(initialFormState)
 
   useEffect(() => {
-    if (detailedActivity) setActivity(detailedActivity)
-  }, [detailedActivity])
+    window.scrollTo({top: 0, behavior: "smooth"})
+  }, [])
+
+  useEffect(() => {
+    detailedActivity ? setActivity(detailedActivity) : loadActivity(params.id)
+  }, [detailedActivity, loadActivity, params])
 
   const updateActivity = (e: any) => {
     setActivity(prev => ({...prev, [e.target.name]: e.target.value}))
@@ -53,6 +61,8 @@ const FullDetailsActivity = () => {
   const closeViewModeWithRedirect = () => {
     inEditMode ? closeViewMode() : history.push("/")
   }
+
+  if (loading) return <CirclesLoader />
 
   return (
     <div className="w-full mt-12 h-screen">

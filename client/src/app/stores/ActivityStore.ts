@@ -32,6 +32,23 @@ export default class ActivityStore {
     }
   }
 
+  loadActivity = async (id: string) => {
+    let activity = this.activities.find(act => act.id === id)
+    if (activity) {
+      this.detailedActivity = activity
+    } else {
+      this.loading = true
+      try {
+        let activity = await agent.Activities.details(id)
+        this.detailedActivity = activity
+      } catch (err) {
+        console.log(err)
+        this.loading = false
+      }
+      this.loading = false
+    }
+  }
+
   selectActivityDetails = (activity: Activity) => {
     this.detailedActivity = activity
     this.inEditMode = false

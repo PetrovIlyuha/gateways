@@ -46,7 +46,7 @@ const Card = ({activity}: any) => {
             className="h-14 flex justify-center items-center px-3 py-2 bg-gradient-to-br from-cyan-300 to-cyan-600 text-white font-semibold text-md m-2 rounded-md shadow-inner"
             onClick={() => selectActivityDetails(activity)}
           >
-            <VscUnfold size={32} /> Quick View
+            <VscUnfold size={32} className="group-hover:animate-pulse" /> Quick View
           </button>
 
           <Link to={`/activity/${activity.id}`}>
@@ -54,7 +54,7 @@ const Card = ({activity}: any) => {
               className="h-14 flex justify-center items-center px-3 py-2 bg-gradient-to-br from-blue-400 to-blue-800 text-white font-semibold text-md m-2 rounded-md shadow-inner"
               onClick={() => selectActivityDetails(activity)}
             >
-              <SiRevealdotjs size={32} />
+              <SiRevealdotjs size={32} className="group-hover:animate-pulse" />
               Detailed View
             </button>
           </Link>
