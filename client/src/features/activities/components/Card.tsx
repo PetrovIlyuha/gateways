@@ -11,7 +11,7 @@ const Card = ({activity}: any) => {
     activityStore: {selectActivityDetails},
   } = useStore()
   return (
-    <div className="flex group flex-col shadow-inner border-2 border-slate-300 rounded-md  bg-gradient-to-r from-gray-50 to-slate-300">
+    <div className="flex group flex-col rounded-md  bg-gradient-to-r from-gray-50 to-slate-300 shadow-md">
       <h2 className="py-4 text-left ml-5 text-xl font-bold">{activity.title}</h2>
       <div className="overflow-hidden sm:h-1/2 md:h-2/3">
         <img
@@ -21,7 +21,7 @@ const Card = ({activity}: any) => {
         />
       </div>
       <div className="flex justify-between">
-        <div className="flex flex-col gap-3 px-14 py-3">
+        <div className="flex flex-col gap-3 px-3 py-3">
           <div className="flex items-center">
             <BsCalendar2Check />
             <h3 className="font-semibold ml-3">{new Date(activity.date).toLocaleDateString()}</h3>
@@ -43,7 +43,7 @@ const Card = ({activity}: any) => {
         </div>
         <div className="flex items-end">
           <button
-            className="h-14 flex justify-center items-center px-3 py-2 bg-gradient-to-br from-cyan-300 to-cyan-600 text-white font-semibold text-md m-2 rounded-md shadow-lg"
+            className="h-14 flex justify-center items-center px-3 py-2 bg-gradient-to-br from-cyan-300 to-cyan-600 text-white font-semibold text-md m-2 rounded-md shadow-inner"
             onClick={() => selectActivityDetails(activity)}
           >
             <VscUnfold size={32} /> Quick View
@@ -51,7 +51,7 @@ const Card = ({activity}: any) => {
 
           <Link to={`/activity/${activity.id}`}>
             <button
-              className="h-14 flex justify-center items-center px-3 py-2 bg-gradient-to-br from-blue-400 to-blue-800 text-white font-semibold text-md m-2 rounded-md shadow-lg"
+              className="h-14 flex justify-center items-center px-3 py-2 bg-gradient-to-br from-blue-400 to-blue-800 text-white font-semibold text-md m-2 rounded-md shadow-inner"
               onClick={() => selectActivityDetails(activity)}
             >
               <SiRevealdotjs size={32} />
