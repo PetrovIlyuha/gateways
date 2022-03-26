@@ -6,7 +6,7 @@ const ActivityList = () => {
   const {activityStore} = useStore()
   return (
     <div className="flex flex-col w-1/2 gap-12 mb-10">
-      {activityStore.activities?.map(activity => (
+      {activityStore.activitiesByDate?.map(activity => (
         <Card activity={activity} key={activity.id} />
       ))}
     </div>

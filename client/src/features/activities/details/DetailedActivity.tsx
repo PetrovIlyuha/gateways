@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+import React, {useEffect, useState} from "react"
 import {motion} from "framer-motion"
 import useScroll from "../../../hooks/useScroll"
 
@@ -34,7 +34,12 @@ const DetailedActivity = () => {
     city: "",
     venue: "",
   }
+
   const [activity, setActivity] = useState(initialFormState)
+
+  useEffect(() => {
+    if (detailedActivity) setActivity(detailedActivity)
+  }, [detailedActivity])
 
   const updateActivity = (e: any) => {
     setActivity(prev => ({...prev, [e.target.name]: e.target.value}))

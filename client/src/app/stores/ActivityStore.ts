@@ -16,6 +16,10 @@ export default class ActivityStore {
     makeAutoObservable(this)
   }
 
+  get activitiesByDate() {
+    return this.activities.slice().sort((a, b) => Date.parse(a.date) - Date.parse(b.date))
+  }
+
   loadActivities = async () => {
     this.loading = true
     try {
@@ -35,7 +39,6 @@ export default class ActivityStore {
 
   closeEditMode = async (activity: Activity | undefined) => {
     this.submitting = true
-
     if (activity !== undefined) {
       await agent.Activities.update(activity)
       runInAction(() => {
@@ -56,11 +59,14 @@ export default class ActivityStore {
     this.submitting = true
     if (this.detailedActivity) {
       await agent.Activities.delete(this.detailedActivity.id)
-      this.activities = this.activities.filter(a => a.id !== this.detailedActivity?.id)
-      this.submitting = false
+
       this.toggleEditMode()
-      this.detailedActivity = undefined
+      runInAction(() => {
+        this.activities = this.activities.filter(a => a.id !== this.detailedActivity?.id)
+        this.detailedActivity = undefined
+      })
     }
+    this.submitting = false
   }
 
   createActivity = async (activity: Activity) => {
