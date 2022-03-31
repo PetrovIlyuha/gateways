@@ -17,7 +17,12 @@ export default class ActivityStore {
   }
 
   get activitiesByDate() {
-    return this.activities.slice().sort((a, b) => Date.parse(a.date) - Date.parse(b.date))
+    return this.activities.reduce((activities, activity) => {
+      const date = activity.date
+      activities[date] = activities[date] ? [...activities[date], activity] : [activity]
+      return activities
+    }, {} as {[key: string]: Activity[]})
+    // return this.activities.slice().sort((a, b) => Date.parse(a.date) - Date.parse(b.date))
   }
 
   loadActivities = async () => {
@@ -25,7 +30,7 @@ export default class ActivityStore {
     try {
       this.activities = await agent.Activities.list()
       runInAction(() => {
-        this.detailedActivity = this.activities[0]
+        // this.detailedActivity = this.activities[0]
         this.loading = false
       })
     } catch (error) {

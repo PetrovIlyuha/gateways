@@ -4,7 +4,7 @@ import CirclesLoader from "../../../app/layout/shared/loaders/CirclesLoader"
 import {useStore} from "../../../app/stores/store"
 import ActivityList from "./ActivityList"
 import SideDetailedActivity from "../details/SideDetailedActivity"
-import ArtWork from "../../../app/layout/shared/fillers/ArtWork"
+import ActivityFilters from "../../../app/layout/shared/filters/ActivityFilters"
 
 const ActivityDashboard = () => {
   const {
@@ -24,7 +24,7 @@ const ActivityDashboard = () => {
   return (
     <div className="sm:w-4xl max-w-7xl md:max-w-5xl m-auto flex mt-12 gap-3">
       <ActivityList />
-      {detailedActivity ? <SideDetailedActivity /> : <ArtWork />}
+      {detailedActivity ? <SideDetailedActivity /> : <ActivityFilters />}
     </div>
   )
 }
