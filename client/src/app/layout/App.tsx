@@ -1,33 +1,29 @@
 import {Switch, Route} from "react-router-dom"
-import {useState, useEffect} from "react"
+import {useState} from "react"
 import {motion} from "framer-motion"
 import TopNavigation from "./shared/TopNavigation"
 import ActivityDashboard from "../../features/activities/dashboard/ActivityDashboard"
 import CreateActivityForm from "../../features/activities/create/CreateActivityForm"
 import VideoLoaderOnLoad from "./shared/VideoLoaderOnLoad"
 import {ToastContainer} from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
 import FullDetailsActivity from "../../features/activities/details/FullDetailsActivity"
 import ConfirmModal from "./shared/modals/ConfirmModal"
+import "react-toastify/dist/ReactToastify.css"
 
 function App() {
-  const [showIntro, setShowIntro] = useState<Boolean>(false)
-
-  useEffect(() => {
-    setTimeout(() => setShowIntro(false), 2200)
-  }, [])
+  const [showIntro, setShowIntro] = useState<Boolean>(true)
 
   return (
     <div className="bg-gray-100">
       {showIntro ? (
-        <VideoLoaderOnLoad />
+        <VideoLoaderOnLoad setShowIntro={setShowIntro} />
       ) : (
         <motion.div
           initial={{y: 200, opacity: 0}}
           animate={{
             y: 0,
             opacity: 1,
-            transition: {duration: 1.2, ease: "backIn"},
+            transition: {duration: 0.2, ease: "backIn"},
           }}
         >
           <TopNavigation />

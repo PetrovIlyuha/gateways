@@ -3,7 +3,7 @@ import {useEffect, useState} from "react"
 const useScroll = () => {
   const [scrollTop, setScrollTop] = useState(0)
 
-  const onScroll = (e: any) => {
+  const onScroll = (e) => {
     setScrollTop(e.target.documentElement.scrollTop)
   }
 

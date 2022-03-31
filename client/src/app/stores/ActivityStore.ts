@@ -24,34 +24,50 @@ export default class ActivityStore {
     this.loading = true
     try {
       this.activities = await agent.Activities.list()
-      this.detailedActivity = this.activities[0]
-      this.loading = false
+      runInAction(() => {
+        this.detailedActivity = this.activities[0]
+        this.loading = false
+      })
     } catch (error) {
       console.log(error)
-      this.loading = false
+      runInAction(() => {
+        this.loading = false
+      })
     }
   }
 
   loadActivity = async (id: string) => {
     let activity = this.activities.find(act => act.id === id)
     if (activity) {
-      this.detailedActivity = activity
+      runInAction(() => {
+        this.detailedActivity = activity
+      })
     } else {
-      this.loading = true
+      runInAction(() => {
+        this.loading = true
+      })
       try {
         let activity = await agent.Activities.details(id)
-        this.detailedActivity = activity
+        runInAction(() => {
+          this.detailedActivity = activity
+        })
       } catch (err) {
         console.log(err)
-        this.loading = false
+        runInAction(() => {
+          this.loading = false
+        })
       }
-      this.loading = false
+      runInAction(() => {
+        this.loading = false
+      })
     }
   }
 
   selectActivityDetails = (activity: Activity) => {
-    this.detailedActivity = activity
-    this.inEditMode = false
+    runInAction(() => {
+      this.detailedActivity = activity
+      this.inEditMode = false
+    })
   }
 
   closeEditMode = async (activity: Activity | undefined) => {

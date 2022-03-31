@@ -1,4 +1,4 @@
-import {makeAutoObservable} from "mobx"
+import {makeAutoObservable, runInAction} from "mobx"
 
 export const MODAL_TYPES = {
   CONFIRM_DELETE_ACTIVITY: "CONFIRM_DELETE_ACTIVITY",
@@ -17,9 +17,13 @@ export default class ModalStore {
 
   toggleModal = (id: string) => {
     if (this.openModalsIds.includes(id)) {
-      this.openModalsIds = this.openModalsIds.filter(m => m !== id)
+      runInAction(() => {
+        this.openModalsIds = this.openModalsIds.filter(m => m !== id)
+      })
     } else {
-      this.openModalsIds.push(id)
+      runInAction(() => {
+        this.openModalsIds.push(id)
+      })
     }
   }
 }

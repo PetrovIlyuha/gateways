@@ -15,6 +15,10 @@ const ActivityDashboard = () => {
     loadActivities()
   }, [loadActivities])
 
+  useEffect(() => {
+    window.scrollTo({top: 0, behavior: "smooth"})
+  }, [])
+
   if (loading) return <CirclesLoader />
 
   return (

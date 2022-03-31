@@ -102,7 +102,7 @@ const FullDetailsActivity = () => {
               onClick={closeViewModeWithRedirect}
               className="py-3 px-6 bg-gradient-to-br from-red-500 to-red-800 w-1/2 rounded-md shadow-sm text-white font-semibold text-2xl"
             >
-              {inEditMode ? "Cancel" : "Close View"}
+              {inEditMode ? "Cancel" : "Back to Feed"}
             </button>
           </div>
           <div className="lg:grid lg:grid-cols-2 gap-5 mt-3">
